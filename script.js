@@ -178,6 +178,32 @@ function secondsToMinutes(seconds) {
   return timeStr;
 }
 
+let searchBar = document.querySelector(".search");
+
+function setAttributes(el, attrs) {
+  for (var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
+searchBar.addEventListener("click", function () {
+  let searchBigBar = document.createElement("input");
+  let searchPlace = document.querySelector(".main-scroll");
+  let navbarToggler = document.querySelector(".navbar-toggler");
+
+  setAttributes(searchBigBar, {
+    type: "text",
+    class: "form-control search-bar",
+    placeholder: "Search...",
+  });
+  searchPlace.insertBefore(searchBigBar, navbarToggler);
+  //   if (searchPlace.querySelector("search-bar") == null) {
+  //     searchPlace.insertBefore(searchBigBar, navbarToggler);
+  //   } else {
+  //     searchPlace.removeChild(searchBigBar);
+  //   }
+});
+
 playBtn.addEventListener("click", function () {
   if (playBtn.className === "fas fa-play-circle") {
     playBtn.classList.remove("fa-play-circle");

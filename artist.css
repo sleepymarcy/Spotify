@@ -814,3 +814,6 @@ button.save-btn:focus > i,
   transform: scale(1.2);
   box-shadow: 0px 0px 5px rgba(226, 226, 226, 0.616);
 }
+.search-bar {
+  width: 25%;
+}
