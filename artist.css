@@ -68,7 +68,6 @@ nav {
   width: 82%;
 }
 .nav-artist {
-  background-image: url(/covers/qmaincover.jpeg);
   background-size: cover;
   width: 134%;
   left: -28px;
@@ -798,4 +797,15 @@ button.save-btn:focus > i,
   opacity: 0;
   width: 12px;
   z-index: 4;
+}
+
+/* new CSS */
+
+.track-item:hover {
+  background-color: #4d4c4c;
+  box-shadow: 0px 0px 5px rgba(226, 226, 226, 0.616);
+}
+
+.track-item a:hover {
+  transform: translateY(10px);
 }

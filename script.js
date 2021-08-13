@@ -37,98 +37,73 @@ function fetchTrack(id) {
     });
 }
 
+function loadMoreTracks() {
+  fetch(
+    `https://strive-proxy.herokuapp.com/https://api.deezer.com/artist/412/top?index=${tracksLoaded}`
+  )
+    .then((data) => data.json())
+    .then((moreData) => {
+      console.log(moreData);
+      displayTrack(moreData.data);
+    });
+}
+
+let tracksParentContainer = document.querySelector(".trackTable");
+function loadMoreTracksBTN() {
+  let loadMoreBtn = document.createElement("button");
+  loadMoreBtn.setAttribute("type", "button");
+  loadMoreBtn.classList.add("btn", "btn-outline-light");
+  loadMoreBtn.innerText = "Load More";
+  tracksParentContainer.append(loadMoreBtn);
+
+  loadMoreBtn.addEventListener("click", function (e) {
+    tracksLoaded += 5;
+    loadMoreTracks(e, tracksLoaded);
+  });
+}
+
+let tracksLoaded = 0;
+
 function displayTrack(tracks) {
   let tracksContainer = document.querySelector(".trackTable tbody");
-  let tracksParentContainer = document.querySelector(".trackTable");
-
-  //   let loadMoreBtn = document.createElement("button");
-  //   loadMoreBtn.setAttribute("type", "button");
-  //   loadMoreBtn.classList.add("btn", "btn-outline-light");
-  //   loadMoreBtn.innerText = "Load More";
-  //   tracksParentContainer.append(loadMoreBtn);
-
-  //   loadMoreBtn.addEventListener("click", function (e) {
-  //     alert(e.target.parentNode.querySelector(".trackTable tbody"));
-  //     fetch("https://api.deezer.com/artist/412/top?index=5", {
-  //       method: "GET",
-  //       headers: {
-  //         "x-rapidapi-key": "9835f40629mshe9f0744f8b07fe0p13e171jsn785e2f64657a",
-  //         "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
-  //       },
-  //     })
-  //       .then((data) => data.json())
-  //       .then((moreData) => {
-  //         console.log(moreData);
-  //       });
-  //   });
 
   tracks.forEach((track, index) => {
     let trackContainer = document.createElement("tr");
+    trackContainer.classList.add("track-item");
 
     trackContainer.innerHTML = `<th scope="row">${index + 1}</th>
-    <th scope="col">
-      <img src="${track.album.cover} " alt="">
-    </th>
+    <th scope="col"> 
+        <a href = "album.html">
+        <img src="${track.album.cover}" alt="">
+         </a>
+      </th>
     <td>${track.title_short}</td>
     <td>${track.rank.toLocaleString()}</td>
     <td>${secondsToMinutes(track.duration)}</td>
     `;
 
     tracksContainer.append(trackContainer);
+
+    trackContainer.addEventListener("click", function () {
+      loadPlayback(track);
+    });
   });
+}
 
-  //   tracksContainer.append(trackContainer);
+function loadPlayback(trackItem) {
+  console.log(trackItem);
+  let albumImage = document.querySelector("#footer-left .album-cover-image");
+  albumImage.innerHTML = `<img
+  class="img-fluid"
+  src="${trackItem.album.cover}"
+  alt=""
+/>`;
+  let songTitle = document.querySelector("#footer-left .song-title");
+  songTitle.innerText = `${trackItem.title_short}`;
+  let songAuthor = document.querySelector("#footer-left .song-author");
+  songAuthor.innerText = `${trackItem.artist.name}`;
 
-  //   trackContainer.classList.add("row", "track-row");
-
-  //   let tracksContainer = document.querySelector(".tracks");
-
-  //   console.log(tracksContainer.childNodes["1"]);
-
-  //   trackContainer.innerHTML += `<div
-  //     class="
-  //       track-info-left
-  //       d-flex
-  //       align-items-center
-  //       justify-content-start
-  //     "
-  //   >
-  //     <span class="track-number">1</span>
-  //     <div class="track-img">
-  //       <img src=${track.album.cover} alt="" />
-  //     </div>
-  //     <h5 class="track-title text-nowrap">${track.title}</h5>
-  //   </div>
-  //   <div class="track-info-middle track-listeners">
-  //     <span>${track.rank}</span>
-  //   </div>
-  //   <div
-  //     class="
-  //       track-info-right track-length
-  //       d-flex
-  //       align-items-center
-  //       justify-content-start
-  //     "
-  //   >
-  //     <button class="track-like">
-  //       <i class="far fa-heart"></i>
-  //     </button>
-  //     <span>${secondsToMinutes(track.duration)}</span>
-  //     <button class="track-more">
-  //       <svg
-  //         role="img"
-  //         height="16"
-  //         width="16"
-  //         viewBox="0 0 32 32"
-  //         class="Svg-sc-1bi12j5-0 fIDrcz"
-  //       >
-  //         <path
-  //           d="M5.998 13.999A2 2 0 105.999 18a2 2 0 00-.001-4zm10.001 0A2 2 0 1016 18a2 2 0 000-4zm10.001 0A2 2 0 1026.001 18 2 2 0 0026 14z"
-  //         ></path>
-  //       </svg>
-  //     </button>
-  //   </div>`;
-  //   tracksContainer.append(trackContainer);
+  totalTime.innerText = `${secondsToMinutes(trackItem.duration)}`;
 }
 
 function displayArtist(artist) {
@@ -188,7 +163,7 @@ function displayArtist(artist) {
 function secondsToMinutes(seconds) {
   let minutes = Math.floor(seconds / 60);
   let _seconds = Math.floor(seconds - minutes * 60);
-  let timeStr = `${minutes}:${_seconds}`;
+  let timeStr = `${minutes}:${_seconds < 10 ? "0" + _seconds : _seconds}`;
   return timeStr;
 }
 
@@ -226,4 +201,5 @@ window.onload = function (event) {
   console.log("page is fully loaded", event.curr);
   getArtist();
   fetchTrack(13);
+  loadMoreTracksBTN();
 };
