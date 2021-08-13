@@ -70,14 +70,14 @@ nav {
 .nav-artist {
   background-image: url(/covers/qmaincover.jpeg);
   background-size: cover;
-  width: 132%;
+  width: 134%;
   left: -28px;
   right: 0px;
   height: 45vh;
   contain: strict;
   content-visibility: auto;
   background-repeat: no-repeat;
-  background-position: 50% 50%;
+  background-position: 0% 20%;
   background-attachment: scroll;
   min-height: 310px;
   position: relative;
