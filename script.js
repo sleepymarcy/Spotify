@@ -14,6 +14,7 @@ function getArtist() {
     .then((response) => response.json())
     .then((artistData) => {
       displayArtist(artistData);
+      loadMoreTracksBTN(artistData.id);
       console.log(artistData);
     })
     .catch((err) => {
@@ -30,6 +31,7 @@ function fetchTrack(id) {
     .then((response) => response.json())
     .then((trackData) => {
       displayTrack(trackData.data);
+
       console.log(trackData.data);
     })
     .catch((err) => {
@@ -37,9 +39,9 @@ function fetchTrack(id) {
     });
 }
 
-function loadMoreTracks() {
+function loadMoreTracks(event, ArtistId, tracksLoaded) {
   fetch(
-    `https://strive-proxy.herokuapp.com/https://api.deezer.com/artist/412/top?index=${tracksLoaded}`
+    `https://strive-proxy.herokuapp.com/https://api.deezer.com/artist/${ArtistId}/top?index=${tracksLoaded}`
   )
     .then((data) => data.json())
     .then((moreData) => {
@@ -49,7 +51,7 @@ function loadMoreTracks() {
 }
 
 let tracksParentContainer = document.querySelector(".trackTable");
-function loadMoreTracksBTN() {
+function loadMoreTracksBTN(artistId) {
   let loadMoreBtn = document.createElement("button");
   loadMoreBtn.setAttribute("type", "button");
   loadMoreBtn.classList.add("btn", "btn-outline-light");
@@ -57,8 +59,9 @@ function loadMoreTracksBTN() {
   tracksParentContainer.append(loadMoreBtn);
 
   loadMoreBtn.addEventListener("click", function (e) {
+    alert(artistId);
     tracksLoaded += 5;
-    loadMoreTracks(e, tracksLoaded);
+    loadMoreTracks(e, artistId, tracksLoaded);
   });
 }
 
@@ -87,6 +90,10 @@ function displayTrack(tracks) {
     trackContainer.addEventListener("click", function () {
       loadPlayback(track);
     });
+    let loadAlbum = trackContainer.querySelector("th a");
+    loadAlbum.addEventListener("click", function (e) {
+      alert(track.album.id);
+    });
   });
 }
 
@@ -102,6 +109,10 @@ function loadPlayback(trackItem) {
   songTitle.innerText = `${trackItem.title_short}`;
   let songAuthor = document.querySelector("#footer-left .song-author");
   songAuthor.innerText = `${trackItem.artist.name}`;
+
+  songAuthor.addEventListener("click", function () {
+    getArtist(trackItem.artist.id);
+  });
 
   totalTime.innerText = `${secondsToMinutes(trackItem.duration)}`;
 }
@@ -198,8 +209,6 @@ window.onload = function (event) {
   currentTime.innerText = "0:00";
   playbackTime.style.backgroundSize = `0% 100%`;
   playbackTime.setAttribute("value", "0");
-  console.log("page is fully loaded", event.curr);
-  getArtist();
+  getArtist(13);
   fetchTrack(13);
-  loadMoreTracksBTN();
 };

@@ -806,6 +806,11 @@ button.save-btn:focus > i,
   box-shadow: 0px 0px 5px rgba(226, 226, 226, 0.616);
 }
 
-.track-item a:hover {
-  transform: translateY(10px);
+.track-item a img {
+  transform: scale(1);
+  transition: all 0.5s;
+}
+.track-item a:hover img {
+  transform: scale(1.2);
+  box-shadow: 0px 0px 5px rgba(226, 226, 226, 0.616);
 }
