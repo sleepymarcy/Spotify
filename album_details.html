@@ -231,11 +231,14 @@
 
     function displayDetails(details) {
             row.innerHTML = details.map(detail => `
-        <div class="col-lg-3 d-flex align-items-stretch">
+        <div class="col-lg-3" style=" padding: 20px;">
             <div class="card" style="margin-bottom: 50px;">
                 <img src="${detail.album.cover}" class="card-img-top" alt="...">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${detail.title}</h5>
+                    <p>Album: ${detail.album.title}</p>
+                    <p>Artist: ${detail.artist.name}</p>
+                    <p>Duration: ${detail.duration}s</p>
                 </div>
             </div>
         </div>
