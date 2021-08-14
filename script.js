@@ -3,8 +3,8 @@ const currentTime = document.querySelector(".curent-time");
 const totalTime = document.querySelector(".total-time");
 const playBtn = document.querySelector(".btn-footer-play > i");
 
-function getArtist() {
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/artist/13", {
+function getArtist(id) {
+  fetch(`https://deezerdevs-deezer.p.rapidapi.com/artist/${id}, {
     method: "GET",
     headers: {
       "x-rapidapi-key": "9835f40629mshe9f0744f8b07fe0p13e171jsn785e2f64657a",
@@ -195,6 +195,7 @@ searchBar.addEventListener("click", function () {
     type: "text",
     class: "form-control search-bar",
     placeholder: "Search...",
+    onchange: "searchForArtist(this.value)",
   });
   searchPlace.insertBefore(searchBigBar, navbarToggler);
   //   if (searchPlace.querySelector("search-bar") == null) {
@@ -203,6 +204,12 @@ searchBar.addEventListener("click", function () {
   //     searchPlace.removeChild(searchBigBar);
   //   }
 });
+
+function searchForArtist(query) {
+  fetch(`https://striveschool-api.herokuapp.com/api/deezer/search?q=${query}`)
+    .then((response) => response.json())
+    .then((el) => getArtist(el.data[0].artist.id));
+}
 
 playBtn.addEventListener("click", function () {
   if (playBtn.className === "fas fa-play-circle") {
